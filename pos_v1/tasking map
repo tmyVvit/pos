@@ -36,30 +36,21 @@
    input : cartItems
    output: totalCost: number
 
-#6 calculateSaved
+#6 calculateSaved C
    input : discountItems
    output: saved : number
 
-#7 buildReceipts
-   input : cartItems, totalCost, saved
-   output: receipts:{
-               name: string,
-               count: string,
-               unit : string,
-               price: string,
-               subTotal: string
-            }
 
-#8 buildReceipts:
-input: receipts
+#7 buildReceiptsString:
+input: cartItems, totalCost, saved
 output:receiptsString{
-           receipts:{
+           receipts:[{
                name: string,
                count: string,
                unit : string,
                price: string,
                subTotal: string
-           },
+           }],
            totalCost: string,
            saved : string
 }

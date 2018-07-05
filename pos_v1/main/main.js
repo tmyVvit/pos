@@ -117,6 +117,27 @@ function calculateSaved(discountItems) {
   return saved;
 }
 
+function buildReceiptsString(cartItems, totalCost, saved) {
+
+  const receipts = [];
+  for(let carItem of cartItems) {
+    receipts.push({
+      name: carItem.name,
+      count: carItem.count.toString(),
+      unit : carItem.unit,
+      price: carItem.price.toFixed(2).toString(),
+      subTotal: carItem.subTotal.toFixed(2).toString()
+    });
+  }
+  const totalCostString = JSON.stringify(totalCost.toFixed(2));
+  const savedString = JSON.stringify(saved.toFixed(2));
+  const receiptsString = {receipts,
+                          totalCost: totalCostString,
+                          saved    : savedString};
+
+  return receiptsString;
+}
+
 function print(info, sum, saved){
 
   let frontDetail = "***<没钱赚商店>收据***\n";

@@ -111,18 +111,17 @@ describe('#4. calculateSubtotal test', () => {
       'ITEM000005',
       'ITEM000005-2',
     ];
-
-    const barcodeLists = formatBarcodeLists(tags);
-    const cartItems = buildCartItems(barcodeLists);
-    const discountItems = buildDiscountItems(cartItems);
-
-
-    const cartItemsCopy = calculateSubtotal(cartItems, discountItems)
-
     const hoped_cart_items_include_subTotal = JSON.stringify([
       {barcode: "ITEM000001", name: "雪碧", count: 5, unit: "瓶", price: 3, subTotal: 12},
       {barcode: "ITEM000003", name: "荔枝", count: 2.5, unit: "斤", price: 15, subTotal: 37.5},
       {barcode: "ITEM000005", name: "方便面", count: 3, unit: "袋", price: 4.5, subTotal: 9}]);
+
+    const barcodeLists = formatBarcodeLists(tags);
+    const cartItems = buildCartItems(barcodeLists);
+    const discountItems = buildDiscountItems(cartItems);
+    const cartItemsCopy = calculateSubtotal(cartItems, discountItems)
+
+
 
     expect(JSON.stringify(cartItemsCopy)).toBe(hoped_cart_items_include_subTotal);
   });
@@ -173,10 +172,46 @@ describe('#6. calculateSaved test', () => {
     const cartItems = buildCartItems(barcodeLists);
     const discountItems = buildDiscountItems(cartItems);
     const cartItemsFinal = calculateSubtotal(cartItems, discountItems);
-    const totalCost = calculateTotalCost(cartItemsFinal);
+    //const totalCost = calculateTotalCost(cartItemsFinal);
     const saved = calculateSaved(discountItems);
 
 
     expect(JSON.stringify(saved)).toBe(hoped_saved);
+  });
+});
+
+describe('#7. buildReceiptsString test', () => {
+
+  it('should get the final receipts string', function () {
+    const tags = [
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000003-2.5',
+      'ITEM000005',
+      'ITEM000005-2',
+    ];
+    const hoped_receipts_string_first_receipts = JSON.stringify({name:  '雪碧', count: '5', unit : '瓶', price: '3.00', subTotal: '12.00'});
+/*    const hoped_receipts_string  = {
+      receipts : [{name:  "雪碧", count: "5", unit : "瓶", price: "3.00", subTotal: "12.00"},
+                  {name: "荔枝", count: "2.5", unit : "斤", price: "15.00", subTotal: "37.50"},
+                  {name: "方便面", count: "3", unit : "袋", price: "4.50", subTotal: "9.00"}],
+      totalCost: "58.50",
+      saved    : "7.50"
+    };*/
+
+    const barcodeLists = formatBarcodeLists(tags);
+    const cartItems = buildCartItems(barcodeLists);
+    const discountItems = buildDiscountItems(cartItems);
+    const cartItemsFinal = calculateSubtotal(cartItems, discountItems);
+    const totalCost = calculateTotalCost(cartItemsFinal);
+    const saved = calculateSaved(discountItems);
+    const receiptsString = buildReceiptsString(cartItems, totalCost, saved);
+
+
+
+    expect(JSON.stringify(receiptsString.receipts[0])).toBe(hoped_receipts_string_first_receipts);
   });
 });
