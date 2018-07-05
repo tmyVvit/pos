@@ -53,3 +53,22 @@ describe('#1. formatBarcodeLists test', () => {
     expect(barcodeLists).toBe(hoped_barcode_lists);
   });
 });
+
+describe('#2. buildCartItems test', () => {
+
+  it('should build the information of cartItems', function () {
+    const barcodeLists = [{barcode:'ITEM000001',count:5},
+                          {barcode:'ITEM000003',count:2.5},
+                          {barcode:'ITEM000005',count:3}];
+
+    const hoped_cart_items = JSON.stringify([
+      {barcode: "ITEM000001", name: "雪碧", count: 5, unit: "瓶", price: 3},
+      {barcode: "ITEM000003", name: "荔枝", count: 2.5, unit: "斤", price: 15},
+      {barcode: "ITEM000005", name: "方便面", count: 3, unit: "袋", price: 4.5}]);
+
+    const cartItems = buildCartItems(barcodeLists);
+
+
+    expect(JSON.stringify(cartItems)).toBe(hoped_cart_items);
+  });
+});

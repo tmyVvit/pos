@@ -33,49 +33,46 @@ function formatBarcodeLists(tags) {
   }
   console.info(barcodeLists);
   return barcodeLists;
-}
   /*for(let i = 0; i < inputArray.length; i++) {
-    let barcode = inputArray[i], count = 1;
-    if(barcode.length > len){
-      count = barcode.substring(11, barcode.length)*1;
-      barcode = barcode.substr(0, len);
-    }
-
-    let index = kindOfBarcode.indexOf(barcode);
-    if(index > -1){
-      originData[index].count += count;
-    } else {
-      originData.push({barcode: barcode, count: count});
-      kindOfBarcode.push(barcode);
-    }
-  }
-  return originData;
-*/
-
-
-
-function originCal(inputArray){
-  let originData = [];
-  let kindOfBarcode = [];
-
-  for(let i = 0; i < inputArray.length; i++) {
-    let barcode = inputArray[i], count = 1;
-    if(barcode.length > len){
-      count = barcode.substring(11, barcode.length)*1;
-      barcode = barcode.substr(0, len);
-    }
-
-    let index = kindOfBarcode.indexOf(barcode);
-    if(index > -1){
-      originData[index].count += count;
-    } else {
-      originData.push({barcode: barcode, count: count});
-      kindOfBarcode.push(barcode);
-    }
+  let barcode = inputArray[i], count = 1;
+  if(barcode.length > len){
+    count = barcode.substring(11, barcode.length)*1;
+    barcode = barcode.substr(0, len);
   }
 
-  return originData;
+  let index = kindOfBarcode.indexOf(barcode);
+  if(index > -1){
+    originData[index].count += count;
+  } else {
+    originData.push({barcode: barcode, count: count});
+    kindOfBarcode.push(barcode);
+  }
 }
+return originData;
+*/
+}
+
+function buildCartItems(barcodeLists) {
+  const allItems = loadAllItems();
+  let cartItems = [];
+
+  for (let barcodeList of barcodeLists){
+    for (let item of allItems){
+      if(barcodeList.barcode === item.barcode) {
+        cartItems.push({
+          barcode: item.barcode,
+          name   : item.name,
+          count  : barcodeList.count,
+          unit   : item.unit,
+          price  : item.price
+        });
+      }
+    }
+  }
+  console.info(cartItems);
+  return cartItems;
+}
+
 
 function improveData(originData){
   let allItems = loadAllItems();
