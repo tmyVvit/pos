@@ -100,6 +100,14 @@ function calculateSubtotal(cartItems, discountItems) {
   return cartItemsCopy;
 }
 
+function calculateTotalCost(cartItems) {
+  let totalCost = 0;
+  for (let cartItem of cartItems){
+    totalCost += cartItem.subTotal;
+  }
+  return totalCost;
+}
+
 function print(info, sum, saved){
 
   let frontDetail = "***<没钱赚商店>收据***\n";

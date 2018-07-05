@@ -127,3 +127,29 @@ describe('#4. calculateSubtotal test', () => {
     expect(JSON.stringify(cartItemsCopy)).toBe(hoped_cart_items_include_subTotal);
   });
 });
+
+describe('#5. calculateTotalCostal test', () => {
+
+  it('should calculate the total cost', function () {
+    const tags = [
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000003-2.5',
+      'ITEM000005',
+      'ITEM000005-2',
+    ];
+
+    const barcodeLists = formatBarcodeLists(tags);
+    const cartItems = buildCartItems(barcodeLists);
+    const discountItems = buildDiscountItems(cartItems);
+    const cartItemsFinal = calculateSubtotal(cartItems, discountItems);
+    const totalCost = calculateTotalCost(cartItemsFinal);
+
+    const hoped_total_cost = JSON.stringify(58.5);
+
+    expect(JSON.stringify(totalCost)).toBe(hoped_total_cost);
+  });
+});
