@@ -84,7 +84,7 @@ function buildDiscountItems(cartItems) {
 
 }
 
-/*function calculateSubtotal(cartItems, discountItems) {
+function calculateSubtotal(cartItems, discountItems) {
   const cartItemsCopy = cartItems.concat();
   for(let cartItem of cartItemsCopy) {
     let saved = 0;
@@ -98,7 +98,7 @@ function buildDiscountItems(cartItems) {
   }
   //console.info(cartItems)
   return cartItemsCopy;
-}*/
+}
 
 function print(info, sum, saved){
 

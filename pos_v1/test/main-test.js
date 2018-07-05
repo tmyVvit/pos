@@ -98,7 +98,7 @@ describe('#3. buildDiscountItems test', () => {
   });
 });
 
-/*describe('#4. calculateSubtotal test', () => {
+describe('#4. calculateSubtotal test', () => {
 
   it('should add subTotal to cartItems', function () {
     const tags = [
@@ -126,4 +126,4 @@ describe('#3. buildDiscountItems test', () => {
 
     expect(JSON.stringify(cartItemsCopy)).toBe(hoped_cart_items_include_subTotal);
   });
-});*/
+});
