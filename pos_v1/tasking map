@@ -20,6 +20,7 @@
               barcode : string,
               discount: number
            }]
+
 #4 calculateSubtotal
    input : cartItems, discountItems
    output: cartItems[{

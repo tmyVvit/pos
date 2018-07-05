@@ -1,6 +1,6 @@
 'use strict';
 
-/*describe('pos', () => {
+describe('pos', () => {
 
   it('should print text', () => {
 
@@ -30,7 +30,7 @@
 
     expect(console.log).toHaveBeenCalledWith(expectText);
   });
-});*/
+});
 
 describe('#1. formatBarcodeLists test', () => {
 
@@ -72,3 +72,58 @@ describe('#2. buildCartItems test', () => {
     expect(JSON.stringify(cartItems)).toBe(hoped_cart_items);
   });
 });
+
+describe('#3. buildDiscountItems test', () => {
+
+  it('should build the information of discount items', function () {
+    const tags = [
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000003-2.5',
+      'ITEM000005',
+      'ITEM000005-2',
+    ];
+    const barcodeLists = formatBarcodeLists(tags);
+    const cartItems = buildCartItems(barcodeLists);
+    const discountItems = buildDiscountItems(cartItems);
+
+    const hoped_discount_items = JSON.stringify([
+      {barcode: "ITEM000001", discount: 3},
+      {barcode: "ITEM000005", discount: 4.5}]);
+
+    expect(JSON.stringify(discountItems)).toBe(hoped_discount_items);
+  });
+});
+
+/*describe('#4. calculateSubtotal test', () => {
+
+  it('should add subTotal to cartItems', function () {
+    const tags = [
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000003-2.5',
+      'ITEM000005',
+      'ITEM000005-2',
+    ];
+
+    const barcodeLists = formatBarcodeLists(tags);
+    const cartItems = buildCartItems(barcodeLists);
+    const discountItems = buildDiscountItems(cartItems);
+
+
+    const cartItemsCopy = calculateSubtotal(cartItems, discountItems)
+
+    const hoped_cart_items_include_subTotal = JSON.stringify([
+      {barcode: "ITEM000001", name: "雪碧", count: 5, unit: "瓶", price: 3, subTotal: 12},
+      {barcode: "ITEM000003", name: "荔枝", count: 2.5, unit: "斤", price: 15, subTotal: 37.5},
+      {barcode: "ITEM000005", name: "方便面", count: 3, unit: "袋", price: 4.5, subTotal: 9}]);
+
+    expect(JSON.stringify(cartItemsCopy)).toBe(hoped_cart_items_include_subTotal);
+  });
+});*/

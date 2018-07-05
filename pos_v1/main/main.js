@@ -31,25 +31,9 @@ function formatBarcodeLists(tags) {
     }
 
   }
-  console.info(barcodeLists);
+  //console.info("barcodeLists: ");
+  //console.info(barcodeLists);
   return barcodeLists;
-  /*for(let i = 0; i < inputArray.length; i++) {
-  let barcode = inputArray[i], count = 1;
-  if(barcode.length > len){
-    count = barcode.substring(11, barcode.length)*1;
-    barcode = barcode.substr(0, len);
-  }
-
-  let index = kindOfBarcode.indexOf(barcode);
-  if(index > -1){
-    originData[index].count += count;
-  } else {
-    originData.push({barcode: barcode, count: count});
-    kindOfBarcode.push(barcode);
-  }
-}
-return originData;
-*/
 }
 
 function buildCartItems(barcodeLists) {
@@ -69,59 +53,52 @@ function buildCartItems(barcodeLists) {
       }
     }
   }
+  //console.info("cartItems: ");
   console.info(cartItems);
   return cartItems;
 }
+function buildDiscountItems(cartItems) {
+  const promotions = loadPromotions();
+  let discountItems = [];
 
+  for (let promotion of promotions) {
+    if(promotion.type !== PROMOTION_1){
+      continue;
+    }
 
-function improveData(originData){
-  let allItems = loadAllItems();
-  let info = [];
-
-  for(let i = 0; i < originData.length; i++) {
-    for(let j = 0; j < allItems.length; j++) {
-      let oData = originData[i], item = allItems[j];
-      if(oData.barcode === item.barcode) {
-        info.push({barcode: item.barcode,
-                   name   : item.name,
-                   count  : oData.count,
-                   unit   : item.unit,
-                   price  : item.price,
-                   cost    : oData.count * item.price})
+    for (let cartItem of cartItems) {
+      for(let barcode of promotion.barcodes){
+        if(cartItem.barcode === barcode) {
+          let discount = parseInt(cartItem.count / 3) * cartItem.price;
+          discountItems.push({
+            barcode : cartItem.barcode,
+            discount: discount
+          })
+        }
       }
     }
   }
-  return info;
+  //console.info("discountItems: ");
+  //console.info(discountItems);
+  return discountItems;
+
 }
 
-function calculate(info) {
-  let sum = 0;
-  for(let i = 0; i < info.length; i++) {
-    sum += info[i].cost;
-  }
-
-  return sum;
-}
-
-function promotions(info) {
-  let prom = loadPromotions();
-  let saved = 0;
-  for(let i = 0; i < info.length; i++) {
-    let inf = info[i];
-    for(let j = 0; j < prom.length; j++) {
-      if(prom[j].type === prom1){ // 买二送一
-
-        if(prom[j].barcodes.indexOf(inf.barcode)>-1) {
-          let num = parseInt(inf.count/3) * inf.price;
-          inf.cost -= num;
-
-          saved += num;
-        }
-      }else {}  // 其他折扣
+/*function calculateSubtotal(cartItems, discountItems) {
+  const cartItemsCopy = cartItems.concat();
+  for(let cartItem of cartItemsCopy) {
+    let saved = 0;
+    for (let discountItem of discountItems) {
+      if (cartItem.barcode === discountItem.barcode) {
+        saved = discountItem.discount;
+        break;
+      }
     }
+    cartItem.subTotal = cartItem.count * cartItem.price - saved;
   }
-  return saved;
-}
+  //console.info(cartItems)
+  return cartItemsCopy;
+}*/
 
 function print(info, sum, saved){
 
