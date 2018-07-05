@@ -3,8 +3,56 @@
 //TODO: 请在该文件中实现练习要求并删除此注释
 
 // length of barcode
-const len = 10;
-const prom1 = 'BUY_TWO_GET_ONE_FREE';
+const LEN_OF_BARCODE = 10;
+const PROMOTION_1 = 'BUY_TWO_GET_ONE_FREE';
+
+function formatBarcodeLists(tags) {
+  let barcodeLists = [];
+  let kindOfBarcode = [];
+
+  for (let tag of tags) {
+    let barcode = tag;
+    let count = 1;
+    if (tag.length > LEN_OF_BARCODE) {
+      count = parseFloat(barcode.substring(LEN_OF_BARCODE+1, barcode.length));
+      barcode = barcode.substr(0, LEN_OF_BARCODE);
+      //barcode = tag.slice("-")[0];
+      //count = parseFloat(tag.slice("-")[1]);
+    }
+    let index = kindOfBarcode.indexOf(barcode);
+    if (index > -1) {
+      barcodeLists[index].count += count;
+    } else {
+      barcodeLists.push({
+        barcode,
+        count
+      });
+      kindOfBarcode.push(barcode);
+    }
+
+  }
+  console.info(barcodeLists);
+  return barcodeLists;
+}
+  /*for(let i = 0; i < inputArray.length; i++) {
+    let barcode = inputArray[i], count = 1;
+    if(barcode.length > len){
+      count = barcode.substring(11, barcode.length)*1;
+      barcode = barcode.substr(0, len);
+    }
+
+    let index = kindOfBarcode.indexOf(barcode);
+    if(index > -1){
+      originData[index].count += count;
+    } else {
+      originData.push({barcode: barcode, count: count});
+      kindOfBarcode.push(barcode);
+    }
+  }
+  return originData;
+*/
+
+
 
 function originCal(inputArray){
   let originData = [];

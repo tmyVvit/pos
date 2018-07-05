@@ -1,0 +1,64 @@
+#1 formatBarcodeLists
+   input : tags
+   output: barcodeLists[{
+              barcode: string,
+              count: number}]
+
+#2 buildCartItems
+   input : barcodeLists, allItems = loadAllItems()
+   output: cartItems[{
+              barcode : string,
+              name    : string,
+              count   : number,
+              unit    : string,
+              price   : number
+           }]
+
+#3 buildDiscountItems
+   input : cartItems, promotions = loadPromotions()
+   output: discountItems[{
+              barcode : string,
+              discount: number
+           }]
+#4 calculateSubtotal
+   input : cartItems, discountItems
+   output: cartItems[{
+              barcode : string,
+              name    : string,
+              count   : number,
+              unit    : string,
+              price   : number,
+              subTotal: number
+            }]
+
+#5 calculateTotalCost
+   input : cartItems
+   output: totalCost: number
+
+#6 calculateSaved
+   input : discountItems
+   output: saved : number
+
+#7 buildReceipts
+   input : cartItems, totalCost, saved
+   output: receipts:{
+               name: string,
+               count: string,
+               unit : string,
+               price: string,
+               subTotal: string
+            }
+
+#8 buildReceipts:
+input: receipts
+output:receiptsString{
+           receipts:{
+               name: string,
+               count: string,
+               unit : string,
+               price: string,
+               subTotal: string
+           },
+           totalCost: string,
+           saved : string
+}

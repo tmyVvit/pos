@@ -1,6 +1,6 @@
 'use strict';
 
-describe('pos', () => {
+/*describe('pos', () => {
 
   it('should print text', () => {
 
@@ -29,5 +29,27 @@ describe('pos', () => {
 **********************`;
 
     expect(console.log).toHaveBeenCalledWith(expectText);
+  });
+});*/
+
+describe('#1. formatBarcodeLists test', () => {
+
+  it('should get format barcode lists and it\'s count', function () {
+    const tags = [
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000003-2.5',
+      'ITEM000005',
+      'ITEM000005-2',
+    ];
+    const hoped_barcode_lists = JSON.stringify([{barcode:'ITEM000001',count:5},
+                                                {barcode:'ITEM000003',count:2.5},
+                                                {barcode:'ITEM000005',count:3}]);
+
+    const barcodeLists = JSON.stringify(formatBarcodeLists(tags));
+    expect(barcodeLists).toBe(hoped_barcode_lists);
   });
 });
