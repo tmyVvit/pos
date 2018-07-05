@@ -41,7 +41,8 @@ function improveData(originData){
                    name   : item.name,
                    count  : oData.count,
                    unit   : item.unit,
-                   price  : item.price})
+                   price  : item.price,
+                   cost    : oData.count * item.price})
       }
     }
   }
@@ -49,17 +50,15 @@ function improveData(originData){
 }
 
 function calculate(info) {
-  let cost = [], sum = 0;
+  let sum = 0;
   for(let i = 0; i < info.length; i++) {
-    let pr = info[i].count * info[i].price;
-    cost.push(pr);
-    sum += pr;
+    sum += info[i].cost;
   }
 
-  return [cost, sum];
+  return sum;
 }
 
-function promotions(info, cost , sum) {
+function promotions(info) {
   let prom = loadPromotions();
   let saved = 0;
   for(let i = 0; i < info.length; i++) {
@@ -69,34 +68,33 @@ function promotions(info, cost , sum) {
 
         if(prom[j].barcodes.indexOf(inf.barcode)>-1) {
           let num = parseInt(inf.count/3) * inf.price;
-          cost[i] -= num;
+          inf.cost -= num;
 
           saved += num;
         }
       }else {}  // 其他折扣
     }
   }
-
-  sum -= saved;
-  return [cost, sum, saved];
+  return saved;
 }
 
-function print(info, costAfterProm, sumAfterProm, saved){
+function print(info, sum, saved){
 
   let frontDetail = "***<没钱赚商店>收据***\n";
-  let rearDetail = "----------------------\n总计：{sum}(元)\n节省：{saved}(元)\n**********************";
-  let itemDetail = "名称：{name}，数量：{count}{unit}，单价：{price}(元)，小计：{cost}(元)\n";
+  //let rearDetail = "----------------------\n总计：{sum}(元)\n节省：{saved}(元)\n**********************";
+  //let itemDetail = "名称：{name}，数量：{count}{unit}，单价：{price}(元)，小计：{cost}(元)\n";
   let items = "";
 
   items += frontDetail;
   for(let i = 0; i < info.length; i++){
     let count = info[i].count;
     let price = info[i].price;
-    let item = "名称："+info[i].name+"，数量："+count+info[i].unit+"，单价："+price.toFixed(2)+"(元)，小计："+costAfterProm[i].toFixed(2)+"(元)\n";
+    let cost = info[i].cost;
+    let item = "名称："+info[i].name+"，数量："+count+info[i].unit+"，单价："+price.toFixed(2)+"(元)，小计："+cost.toFixed(2)+"(元)\n";
     items += item;
   }
 
-  items += "----------------------\n总计："+sumAfterProm.toFixed(2)+"(元)\n节省："+saved.toFixed(2)+"(元)\n**********************";
+  items += "----------------------\n总计："+(sum-saved).toFixed(2)+"(元)\n节省："+saved.toFixed(2)+"(元)\n**********************";
 
   return items;
 }
@@ -104,17 +102,12 @@ function print(info, costAfterProm, sumAfterProm, saved){
 function printReceipt(inputArray) {
   let originData = originCal(inputArray);
   let info = improveData(originData);
-  let cost, sum, costAfterProm, sumAfterProm, saved;
 
-  let cal = calculate(info);
-  sum = cal[cal.length-1];
-  cost = cal.slice(0, cal.length-1)[0];
+  let sum = calculate(info);
 
-  let prom = promotions(info, cost, sum);
-  saved = prom[prom.length-1];
-  sumAfterProm = prom[prom.length-2];
-  costAfterProm = prom.slice(0, prom.length-2)[0];
 
-  //console.log(cost);
-  console.log(print(info, costAfterProm, sumAfterProm, saved));
+  let saved = promotions(info);
+
+  console.log(print(info, sum, saved));
+
 }
