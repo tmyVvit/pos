@@ -153,3 +153,30 @@ describe('#5. calculateTotalCostal test', () => {
     expect(JSON.stringify(totalCost)).toBe(hoped_total_cost);
   });
 });
+
+describe('#6. calculateSaved test', () => {
+
+  it('should calculate saved money', function () {
+    const tags = [
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000003-2.5',
+      'ITEM000005',
+      'ITEM000005-2',
+    ];
+    const hoped_saved  = JSON.stringify(7.5);
+
+    const barcodeLists = formatBarcodeLists(tags);
+    const cartItems = buildCartItems(barcodeLists);
+    const discountItems = buildDiscountItems(cartItems);
+    const cartItemsFinal = calculateSubtotal(cartItems, discountItems);
+    const totalCost = calculateTotalCost(cartItemsFinal);
+    const saved = calculateSaved(discountItems);
+
+
+    expect(JSON.stringify(saved)).toBe(hoped_saved);
+  });
+});

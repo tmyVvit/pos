@@ -85,8 +85,8 @@ function buildDiscountItems(cartItems) {
 }
 
 function calculateSubtotal(cartItems, discountItems) {
-  const cartItemsCopy = cartItems.concat();
-  for(let cartItem of cartItemsCopy) {
+  const cartItemsFinal = cartItems.concat();
+  for(let cartItem of cartItemsFinal) {
     let saved = 0;
     for (let discountItem of discountItems) {
       if (cartItem.barcode === discountItem.barcode) {
@@ -97,7 +97,7 @@ function calculateSubtotal(cartItems, discountItems) {
     cartItem.subTotal = cartItem.count * cartItem.price - saved;
   }
   //console.info(cartItems)
-  return cartItemsCopy;
+  return cartItemsFinal;
 }
 
 function calculateTotalCost(cartItems) {
@@ -106,6 +106,15 @@ function calculateTotalCost(cartItems) {
     totalCost += cartItem.subTotal;
   }
   return totalCost;
+}
+
+function calculateSaved(discountItems) {
+  let saved = 0;
+  for (let discountItem of discountItems) {
+    saved += discountItem.discount;
+  }
+
+  return saved;
 }
 
 function print(info, sum, saved){

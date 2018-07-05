@@ -32,7 +32,7 @@
               subTotal: number
             }]
 
-#5 calculateTotalCost
+#5 calculateTotalCost C
    input : cartItems
    output: totalCost: number
 
