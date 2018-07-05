@@ -117,10 +117,10 @@ function calculateSaved(discountItems) {
   return saved;
 }
 
-function buildReceiptsString(cartItems, totalCost, saved) {
+function buildReceiptsString(cartItemsFinal, totalCost, saved) {
 
   const receipts = [];
-  for(let carItem of cartItems) {
+  for(let carItem of cartItemsFinal) {
     receipts.push({
       name: carItem.name,
       count: carItem.count.toString(),
@@ -129,8 +129,8 @@ function buildReceiptsString(cartItems, totalCost, saved) {
       subTotal: carItem.subTotal.toFixed(2).toString()
     });
   }
-  const totalCostString = JSON.stringify(totalCost.toFixed(2));
-  const savedString = JSON.stringify(saved.toFixed(2));
+  const totalCostString = totalCost.toFixed(2).toString();
+  const savedString = saved.toFixed(2).toString();
   const receiptsString = {receipts,
                           totalCost: totalCostString,
                           saved    : savedString};
@@ -138,36 +138,34 @@ function buildReceiptsString(cartItems, totalCost, saved) {
   return receiptsString;
 }
 
-function print(info, sum, saved){
+function getReceipts(receiptsString) {
+  let receiptsText = "";
 
-  let frontDetail = "***<没钱赚商店>收据***\n";
-  //let rearDetail = "----------------------\n总计：{sum}(元)\n节省：{saved}(元)\n**********************";
-  //let itemDetail = "名称：{name}，数量：{count}{unit}，单价：{price}(元)，小计：{cost}(元)\n";
-  let items = "";
-
-  items += frontDetail;
-  for(let i = 0; i < info.length; i++){
-    let count = info[i].count;
-    let price = info[i].price;
-    let cost = info[i].cost;
-    let item = "名称："+info[i].name+"，数量："+count+info[i].unit+"，单价："+price.toFixed(2)+"(元)，小计："+cost.toFixed(2)+"(元)\n";
-    items += item;
+  for(let item of receiptsString.receipts) {
+    receiptsText += "\n";
+    receiptsText += `名称：${item.name}，数量：${item.count}${item.unit}，单价：${item.price}(元)，小计：${item.subTotal}(元)`;
   }
 
-  items += "----------------------\n总计："+(sum-saved).toFixed(2)+"(元)\n节省："+saved.toFixed(2)+"(元)\n**********************";
+  const finalText = `***<没钱赚商店>收据***${receiptsText}
+----------------------
+总计：${receiptsString.totalCost}(元)
+节省：${receiptsString.saved}(元)
+**********************`;
 
-  return items;
+  return finalText;
+
 }
 
-function printReceipt(inputArray) {
-  let originData = originCal(inputArray);
-  let info = improveData(originData);
 
-  let sum = calculate(info);
+function printReceipt(tags) {
+  let barcodeLists = formatBarcodeLists(tags);
+  let cartItems = buildCartItems(barcodeLists);
+  let discountItems = buildDiscountItems(cartItems);
+  let cartItemsFinal = calculateSubtotal(cartItems, discountItems);
+  let totalCost = calculateTotalCost(cartItems);
+  let saved = calculateSaved(discountItems);
+  let receiptsString = buildReceiptsString(cartItemsFinal, totalCost, saved);
 
-
-  let saved = promotions(info);
-
-  console.log(print(info, sum, saved));
+  console.log(getReceipts(receiptsString));
 
 }
