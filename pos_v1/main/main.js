@@ -6,6 +6,8 @@
 const LEN_OF_BARCODE = 10;
 const PROMOTION_1 = 'BUY_TWO_GET_ONE_FREE';
 
+
+
 function formatBarcodeLists(tags) {
   let barcodeLists = [];
   let kindOfBarcode = [];
@@ -14,33 +16,47 @@ function formatBarcodeLists(tags) {
     let barcode = tag;
     let count = 1;
     if (tag.length > LEN_OF_BARCODE) {
-      count = parseFloat(barcode.substring(LEN_OF_BARCODE+1, barcode.length));
-      barcode = barcode.substr(0, LEN_OF_BARCODE);
-      //barcode = tag.slice("-")[0];
-      //count = parseFloat(tag.slice("-")[1]);
+      //count = parseFloat(barcode.substring(LEN_OF_BARCODE+1, barcode.length));
+      //barcode = barcode.substr(0, LEN_OF_BARCODE);
+      barcode = tag.split("-")[0];
+      count = parseFloat(tag.split("-")[1]);
     }
+    barcodeLists.push({barcode, count});
+  }
+
+    //console.info("barcodeLists: ");
+  //console.info(barcodeLists);
+  return barcodeLists;
+}
+
+function calculateBarcodeCountLists(barcodeLists) {
+  let kindOfBarcode = [];
+  let barcodeCountLists = [];
+
+  for(let barcodeList of barcodeLists) {
+    let barcode = barcodeList.barcode;
+    let count = barcodeList.count;
     let index = kindOfBarcode.indexOf(barcode);
+
     if (index > -1) {
-      barcodeLists[index].count += count;
+      barcodeCountLists[index].count += count;
     } else {
-      barcodeLists.push({
+      barcodeCountLists.push({
         barcode,
         count
       });
       kindOfBarcode.push(barcode);
     }
-
   }
-  //console.info("barcodeLists: ");
-  //console.info(barcodeLists);
-  return barcodeLists;
+
+  return barcodeCountLists;
 }
 
-function buildCartItems(barcodeLists) {
+function buildCartItems(barcodeCountLists) {
   const allItems = loadAllItems();
   let cartItems = [];
 
-  for (let barcodeList of barcodeLists){
+  for (let barcodeList of barcodeCountLists){
     for (let item of allItems){
       if(barcodeList.barcode === item.barcode) {
         cartItems.push({
@@ -159,7 +175,8 @@ function getReceipts(receiptsString) {
 
 function printReceipt(tags) {
   let barcodeLists = formatBarcodeLists(tags);
-  let cartItems = buildCartItems(barcodeLists);
+  let barcodeCountLists = calculateBarcodeCountLists(barcodeLists);
+  let cartItems = buildCartItems(barcodeCountLists);
   let discountItems = buildDiscountItems(cartItems);
   let cartItemsFinal = calculateSubtotal(cartItems, discountItems);
   let totalCost = calculateTotalCost(cartItems);

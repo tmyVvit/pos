@@ -45,16 +45,36 @@ describe('#1. formatBarcodeLists test', () => {
       'ITEM000005',
       'ITEM000005-2',
     ];
-    const hoped_barcode_lists = JSON.stringify([{barcode:'ITEM000001',count:5},
+    const hoped_barcode_lists = JSON.stringify([{barcode:'ITEM000001',count:1},
+      {barcode:'ITEM000001',count:1},{barcode:'ITEM000001',count:1},{barcode:'ITEM000001',count:1},{barcode:'ITEM000001',count:1},
                                                 {barcode:'ITEM000003',count:2.5},
-                                                {barcode:'ITEM000005',count:3}]);
+                                                {barcode:'ITEM000005',count:1},{barcode:'ITEM000005',count:2}]);
 
     const barcodeLists = JSON.stringify(formatBarcodeLists(tags));
     expect(barcodeLists).toBe(hoped_barcode_lists);
   });
 });
 
-describe('#2. buildCartItems test', () => {
+
+describe('#2. calculateBarcodeCountLists test', () => {
+
+  it('should get format barcode lists and it\'s count', function () {
+
+    const barcodeLists = [{barcode:'ITEM000001',count:1},
+      {barcode:'ITEM000001',count:1},{barcode:'ITEM000001',count:1},{barcode:'ITEM000001',count:1},{barcode:'ITEM000001',count:1},
+      {barcode:'ITEM000003',count:2.5},
+      {barcode:'ITEM000005',count:1},{barcode:'ITEM000005',count:2}];
+    const hopd_barcode_count_lists = JSON.stringify([{barcode:'ITEM000001',count:5},{barcode:'ITEM000003',count:2.5},{barcode:'ITEM000005',count:3}]);
+
+    let barcodeCountLists = JSON.stringify(calculateBarcodeCountLists(barcodeLists));
+
+
+    expect(barcodeCountLists).toBe(hopd_barcode_count_lists);
+  });
+});
+
+
+describe('#3. buildCartItems test', () => {
 
   it('should build the information of cartItems', function () {
     const barcodeLists = [{barcode:'ITEM000001',count:5},
@@ -73,7 +93,7 @@ describe('#2. buildCartItems test', () => {
   });
 });
 
-describe('#3. buildDiscountItems test', () => {
+describe('#4. buildDiscountItems test', () => {
 
   it('should build the information of discount items', function () {
     const tags = [
@@ -87,7 +107,10 @@ describe('#3. buildDiscountItems test', () => {
       'ITEM000005-2',
     ];
     const barcodeLists = formatBarcodeLists(tags);
-    const cartItems = buildCartItems(barcodeLists);
+
+
+    const barcodeCountLists = calculateBarcodeCountLists(barcodeLists)
+    const cartItems = buildCartItems(barcodeCountLists);
     const discountItems = buildDiscountItems(cartItems);
 
     const hoped_discount_items = JSON.stringify([
@@ -98,7 +121,7 @@ describe('#3. buildDiscountItems test', () => {
   });
 });
 
-describe('#4. calculateSubtotal test', () => {
+describe('#5. calculateSubtotal test', () => {
 
   it('should add subTotal to cartItems', function () {
     const tags = [
@@ -117,7 +140,8 @@ describe('#4. calculateSubtotal test', () => {
       {barcode: "ITEM000005", name: "方便面", count: 3, unit: "袋", price: 4.5, subTotal: 9}]);
 
     const barcodeLists = formatBarcodeLists(tags);
-    const cartItems = buildCartItems(barcodeLists);
+    const barcodeCountLists = calculateBarcodeCountLists(barcodeLists);
+    const cartItems = buildCartItems(barcodeCountLists);
     const discountItems = buildDiscountItems(cartItems);
     const cartItemsCopy = calculateSubtotal(cartItems, discountItems)
 
@@ -127,7 +151,7 @@ describe('#4. calculateSubtotal test', () => {
   });
 });
 
-describe('#5. calculateTotalCostal test', () => {
+describe('#6. calculateTotalCostal test', () => {
 
   it('should calculate the total cost', function () {
     const tags = [
@@ -142,7 +166,8 @@ describe('#5. calculateTotalCostal test', () => {
     ];
 
     const barcodeLists = formatBarcodeLists(tags);
-    const cartItems = buildCartItems(barcodeLists);
+    const barcodeCountLists = calculateBarcodeCountLists(barcodeLists);
+    const cartItems = buildCartItems(barcodeCountLists);
     const discountItems = buildDiscountItems(cartItems);
     const cartItemsFinal = calculateSubtotal(cartItems, discountItems);
     const totalCost = calculateTotalCost(cartItemsFinal);
@@ -153,7 +178,7 @@ describe('#5. calculateTotalCostal test', () => {
   });
 });
 
-describe('#6. calculateSaved test', () => {
+describe('#7. calculateSaved test', () => {
 
   it('should calculate saved money', function () {
     const tags = [
@@ -169,7 +194,8 @@ describe('#6. calculateSaved test', () => {
     const hoped_saved  = JSON.stringify(7.5);
 
     const barcodeLists = formatBarcodeLists(tags);
-    const cartItems = buildCartItems(barcodeLists);
+    const barcodeCountLists = calculateBarcodeCountLists(barcodeLists);
+    const cartItems = buildCartItems(barcodeCountLists);
     const discountItems = buildDiscountItems(cartItems);
     const cartItemsFinal = calculateSubtotal(cartItems, discountItems);
     //const totalCost = calculateTotalCost(cartItemsFinal);
@@ -180,7 +206,7 @@ describe('#6. calculateSaved test', () => {
   });
 });
 
-describe('#7. buildReceiptsString test', () => {
+describe('#8. buildReceiptsString test', () => {
 
   it('should get the final receipts string', function () {
     const tags = [
@@ -194,16 +220,17 @@ describe('#7. buildReceiptsString test', () => {
       'ITEM000005-2',
     ];
     const hoped_receipts_string_first_receipts = JSON.stringify({name:  '雪碧', count: '5', unit : '瓶', price: '3.00', subTotal: '12.00'});
-/*    const hoped_receipts_string  = {
-      receipts : [{name:  "雪碧", count: "5", unit : "瓶", price: "3.00", subTotal: "12.00"},
-                  {name: "荔枝", count: "2.5", unit : "斤", price: "15.00", subTotal: "37.50"},
-                  {name: "方便面", count: "3", unit : "袋", price: "4.50", subTotal: "9.00"}],
-      totalCost: "58.50",
-      saved    : "7.50"
-    };*/
+    //    const hoped_receipts_string  = {
+    //  receipts : [{name:  "雪碧", count: "5", unit : "瓶", price: "3.00", subTotal: "12.00"},
+    //              {name: "荔枝", count: "2.5", unit : "斤", price: "15.00", subTotal: "37.50"},
+    //              {name: "方便面", count: "3", unit : "袋", price: "4.50", subTotal: "9.00"}],
+    //  totalCost: "58.50",
+    //  saved    : "7.50"
+    //};
 
     const barcodeLists = formatBarcodeLists(tags);
-    const cartItems = buildCartItems(barcodeLists);
+    const barcodeCountLists = calculateBarcodeCountLists(barcodeLists);
+    const cartItems = buildCartItems(barcodeCountLists);
     const discountItems = buildDiscountItems(cartItems);
     const cartItemsFinal = calculateSubtotal(cartItems, discountItems);
     const totalCost = calculateTotalCost(cartItemsFinal);
@@ -215,3 +242,5 @@ describe('#7. buildReceiptsString test', () => {
     expect(JSON.stringify(receiptsString.receipts[0])).toBe(hoped_receipts_string_first_receipts);
   });
 });
+
+
