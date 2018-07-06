@@ -4,7 +4,14 @@
               barcode: string,
               count: number}]
 
-#2 buildCartItems C
+#2 calculateBarcodeCountLists C
+   input :barcodeLists
+   output:barcodeCountLIsts[{
+             barcode: string,  (unique)
+             count:  number
+                     }]
+
+#3 buildCartItems C
    input : barcodeLists, allItems = loadAllItems()
    output: cartItems[{
               barcode : string,
@@ -14,14 +21,14 @@
               price   : number
            }]
 
-#3 buildDiscountItems C
+#4 buildDiscountItems C
    input : cartItems, promotions = loadPromotions()
    output: discountItems[{
               barcode : string,
               discount: number
            }]
 
-#4 calculateSubtotal C
+#5 calculateSubtotal C
    input : cartItems, discountItems
    output: cartItems[{
               barcode : string,
@@ -32,16 +39,16 @@
               subTotal: number
             }]
 
-#5 calculateTotalCost C
+#6 calculateTotalCost C
    input : cartItems
    output: totalCost: number
 
-#6 calculateSaved C
+#7 calculateSaved C
    input : discountItems
    output: saved : number
 
 
-#7 buildReceiptsString:
+#8 buildReceiptsString:
 input: cartItems, totalCost, saved
 output:receiptsString{
            receipts:[{

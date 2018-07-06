@@ -10,7 +10,6 @@ const PROMOTION_1 = 'BUY_TWO_GET_ONE_FREE';
 
 function formatBarcodeLists(tags) {
   let barcodeLists = [];
-  let kindOfBarcode = [];
 
   for (let tag of tags) {
     let barcode = tag;
@@ -23,7 +22,6 @@ function formatBarcodeLists(tags) {
     }
     barcodeLists.push({barcode, count});
   }
-
     //console.info("barcodeLists: ");
   //console.info(barcodeLists);
   return barcodeLists;
@@ -73,6 +71,7 @@ function buildCartItems(barcodeCountLists) {
   console.info(cartItems);
   return cartItems;
 }
+
 function buildDiscountItems(cartItems) {
   const promotions = loadPromotions();
   let discountItems = [];
@@ -88,7 +87,7 @@ function buildDiscountItems(cartItems) {
           let discount = parseInt(cartItem.count / 3) * cartItem.price;
           discountItems.push({
             barcode : cartItem.barcode,
-            discount: discount
+            discount
           })
         }
       }
@@ -169,7 +168,6 @@ function getReceipts(receiptsString) {
 **********************`;
 
   return finalText;
-
 }
 
 
