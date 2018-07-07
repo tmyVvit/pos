@@ -15,15 +15,11 @@ function formatBarcodeLists(tags) {
     let barcode = tag;
     let count = 1;
     if (tag.length > LEN_OF_BARCODE) {
-      //count = parseFloat(barcode.substring(LEN_OF_BARCODE+1, barcode.length));
-      //barcode = barcode.substr(0, LEN_OF_BARCODE);
       barcode = tag.split("-")[0];
       count = parseFloat(tag.split("-")[1]);
     }
     barcodeLists.push({barcode, count});
   }
-    //console.info("barcodeLists: ");
-  //console.info(barcodeLists);
   return barcodeLists;
 }
 
