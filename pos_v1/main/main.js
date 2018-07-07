@@ -129,6 +129,10 @@ function buildDiscountItems(cartItems) {
 
 function calculateSubtotal(cartItems, discountItems) {
   const cartItemsFinal = cartItems.concat();
+  for(let i = 0; i < cartItemsFinal.length; i++) {
+    cartItemsFinal[i].subTotal = cartItemsFinal[i].count * cartItemsFinal[i].price - discountItems[i].discount;
+  }
+/*
   for(let cartItem of cartItemsFinal) {
     let saved = 0;
     for (let discountItem of discountItems) {
@@ -138,8 +142,8 @@ function calculateSubtotal(cartItems, discountItems) {
       }
     }
     cartItem.subTotal = cartItem.count * cartItem.price - saved;
-  }
-  //console.info(cartItems)
+  }*/
+
   return cartItemsFinal;
 }
 
