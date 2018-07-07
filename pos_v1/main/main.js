@@ -7,7 +7,22 @@ const LEN_OF_BARCODE = 10;
 const PROMOTION_1 = 'BUY_TWO_GET_ONE_FREE';
 
 
+function formatBarcodeLists(tags) {
+  return tags.map(tag => {
+    if(tag.indexOf('-') > -1){
+      return {
+        barcode: tag.split('-')[0],
+        count : parseFloat(tag.split('-')[1])
+      }
+    }
+    return {
+      barcode: tag,
+      count : 1
+    }
+  });
+}
 
+/*
 function formatBarcodeLists(tags) {
   let barcodeLists = [];
 
@@ -21,7 +36,7 @@ function formatBarcodeLists(tags) {
     barcodeLists.push({barcode, count});
   }
   return barcodeLists;
-}
+} */
 
 function calculateBarcodeCountLists(barcodeLists) {
   let kindOfBarcode = [];

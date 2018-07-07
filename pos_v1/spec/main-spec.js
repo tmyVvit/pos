@@ -59,6 +59,7 @@ describe('#1. formatBarcodeLists test', () => {
 });
 
 
+/*
 describe('#2. calculateBarcodeCountLists test', () => {
 
   it('should get format barcode lists and it\'s count', function () {
@@ -246,4 +247,4 @@ describe('#8. buildReceiptsString test', () => {
   });
 });
 
-
+*/
