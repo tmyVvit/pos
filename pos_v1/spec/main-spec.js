@@ -157,7 +157,7 @@ describe('#5. calculateSubtotal test', () => {
     expect(JSON.stringify(cartItemsCopy)).toBe(hoped_cart_items_include_subTotal);
   });
 });
-/*
+
 describe('#6. calculateTotalCostal test', () => {
 
   it('should calculate the total cost', function () {
@@ -250,4 +250,3 @@ describe('#8. buildReceiptsString test', () => {
   });
 });
 
-*/

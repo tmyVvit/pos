@@ -1,6 +1,5 @@
 'use strict';
 
-//TODO: 请在该文件中实现练习要求并删除此注释
 const {loadAllItems, loadPromotions} = require("../main/fixtures")
 // length of barcode
 const LEN_OF_BARCODE = 10;
@@ -21,23 +20,6 @@ function formatBarcodeLists(tags) {
     }
   });
 }
-
-/*
-function formatBarcodeLists(tags) {
-  let barcodeLists = [];
-
-  for (let tag of tags) {
-    let barcode = tag;
-    let count = 1;
-    if (tag.length > LEN_OF_BARCODE) {
-      barcode = tag.split("-")[0];
-      count = parseFloat(tag.split("-")[1]);
-    }
-    barcodeLists.push({barcode, count});
-  }
-  return barcodeLists;
-} */
-
 
 function calculateBarcodeCountLists(barcodeLists) {
   let kindOfBarcode = [];
@@ -66,25 +48,7 @@ function buildCartItems(barcodeCountLists) {
       }
   });
 }
-/*
-function buildCartItems(barcodeCountLists) {
-  const allItems = loadAllItems();
-  let cartItems = [];
 
-  for (let barcodeList of barcodeCountLists){
-    if(isInAllItems(barcodeList, allItems, item=>item.barcode)) {
-      cartItems.push({
-        barcode: item.barcode,
-        name   : item.name,
-        count  : barcodeList.count,
-        unit   : item.unit,
-        price  : item.price
-      });
-    }
-  }
-  return cartItems;
-}
-*/
 function buildDiscountItems(cartItems) {
   const promotions = loadPromotions();
   return cartItems.map(cartItem => {
@@ -102,48 +66,12 @@ function buildDiscountItems(cartItems) {
 
   });
 }
-/*
-function buildDiscountItems(cartItems) {
-  const promotions = loadPromotions();
-  let discountItems = [];
-
-  for (let promotion of promotions) {
-    if(promotion.type !== PROMOTION_1){
-      continue;
-    }
-
-    for (let cartItem of cartItems) {
-      for(let barcode of promotion.barcodes){
-        if(cartItem.barcode === barcode) {
-          let discount = parseInt(cartItem.count / 3) * cartItem.price;
-          discountItems.push({
-            barcode : cartItem.barcode,
-            discount
-          })
-        }
-      }
-    }
-  }
-  return discountItems;
-}*/
 
 function calculateSubtotal(cartItems, discountItems) {
   const cartItemsFinal = cartItems.concat();
   for(let i = 0; i < cartItemsFinal.length; i++) {
     cartItemsFinal[i].subTotal = cartItemsFinal[i].count * cartItemsFinal[i].price - discountItems[i].discount;
   }
-/*
-  for(let cartItem of cartItemsFinal) {
-    let saved = 0;
-    for (let discountItem of discountItems) {
-      if (cartItem.barcode === discountItem.barcode) {
-        saved = discountItem.discount;
-        break;
-      }
-    }
-    cartItem.subTotal = cartItem.count * cartItem.price - saved;
-  }*/
-
   return cartItemsFinal;
 }
 
