@@ -87,6 +87,24 @@ function buildCartItems(barcodeCountLists) {
 */
 function buildDiscountItems(cartItems) {
   const promotions = loadPromotions();
+  return cartItems.map(cartItem => {
+    let promotion = promotions[0];
+     if(promotion.barcodes.indexOf(cartItem.barcode) > -1) {
+        return {
+          barcode: cartItem.barcode,
+          discount:parseInt(cartItem.count / 3) * cartItem.price
+        }
+      }
+      return {
+        barcode: cartItem.barcode,
+        discount: 0
+      }
+
+  });
+}
+/*
+function buildDiscountItems(cartItems) {
+  const promotions = loadPromotions();
   let discountItems = [];
 
   for (let promotion of promotions) {
@@ -106,11 +124,8 @@ function buildDiscountItems(cartItems) {
       }
     }
   }
-  //console.info("discountItems: ");
-  //console.info(discountItems);
   return discountItems;
-
-}
+}*/
 
 function calculateSubtotal(cartItems, discountItems) {
   const cartItemsFinal = cartItems.concat();
