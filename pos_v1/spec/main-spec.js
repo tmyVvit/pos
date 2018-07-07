@@ -1,4 +1,7 @@
 'use strict';
+const {formatBarcodeLists, calculateBarcodeCountLists, buildCartItems, buildDiscountItems, calculateSubtotal, calculateTotalCost, calculateSaved, buildReceiptsString, getReceipts, printReceipt} = require("../main/main")
+const {loadAllItems, loadPromotions} = require("../main/fixtures")
+
 
 describe('pos', () => {
 

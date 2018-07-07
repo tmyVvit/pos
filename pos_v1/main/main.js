@@ -1,7 +1,7 @@
 'use strict';
 
 //TODO: 请在该文件中实现练习要求并删除此注释
-
+const {loadAllItems, loadPromotions} = require("../main/fixtures")
 // length of barcode
 const LEN_OF_BARCODE = 10;
 const PROMOTION_1 = 'BUY_TWO_GET_ONE_FREE';
@@ -180,3 +180,5 @@ function printReceipt(tags) {
   console.log(getReceipts(receiptsString));
 
 }
+
+module.exports = {formatBarcodeLists, calculateBarcodeCountLists, buildCartItems, buildDiscountItems, calculateSubtotal, calculateTotalCost, calculateSaved, buildReceiptsString, getReceipts, printReceipt};
