@@ -38,51 +38,53 @@ function formatBarcodeLists(tags) {
   return barcodeLists;
 } */
 
+
 function calculateBarcodeCountLists(barcodeLists) {
   let kindOfBarcode = [];
   let barcodeCountLists = [];
-
   for(let barcodeList of barcodeLists) {
     let barcode = barcodeList.barcode;
     let count = barcodeList.count;
     let index = kindOfBarcode.indexOf(barcode);
-
     if (index > -1) {
       barcodeCountLists[index].count += count;
     } else {
-      barcodeCountLists.push({
-        barcode,
-        count
-      });
+      barcodeCountLists.push({barcode, count});
       kindOfBarcode.push(barcode);
     }
   }
-
   return barcodeCountLists;
 }
-
+function buildCartItems(barcodeCountLists) {
+  const allItems = loadAllItems();
+  return barcodeCountLists.map(barcodeCountList=>{
+      for(let allItem of allItems) {
+        if(barcodeCountList.barcode === allItem.barcode) {
+          const {name, unit, price} = allItem;
+          return Object.assign(barcodeCountList, {name, unit, price});
+        }
+      }
+  });
+}
+/*
 function buildCartItems(barcodeCountLists) {
   const allItems = loadAllItems();
   let cartItems = [];
 
   for (let barcodeList of barcodeCountLists){
-    for (let item of allItems){
-      if(barcodeList.barcode === item.barcode) {
-        cartItems.push({
-          barcode: item.barcode,
-          name   : item.name,
-          count  : barcodeList.count,
-          unit   : item.unit,
-          price  : item.price
-        });
-      }
+    if(isInAllItems(barcodeList, allItems, item=>item.barcode)) {
+      cartItems.push({
+        barcode: item.barcode,
+        name   : item.name,
+        count  : barcodeList.count,
+        unit   : item.unit,
+        price  : item.price
+      });
     }
   }
-  //console.info("cartItems: ");
-  console.info(cartItems);
   return cartItems;
 }
-
+*/
 function buildDiscountItems(cartItems) {
   const promotions = loadPromotions();
   let discountItems = [];
